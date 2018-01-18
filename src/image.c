@@ -4,6 +4,7 @@
 #include "cuda.h"
 #include <stdio.h>
 #include <math.h>
+#include "NetworkTables/NetworkTable.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -11,6 +12,8 @@
 #include "stb_image_write.h"
 
 int windows = 0;
+
+NetworkTable *table;
 
 float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
@@ -282,6 +285,10 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             int right = (b.x+b.w/2.)*im.w;
             int top   = (b.y-b.h/2.)*im.h;
             int bot   = (b.y+b.h/2.)*im.h;
+            table ->PutNumber("Left", left);
+            table ->PutNumber("Right", right);
+            table ->PutNumber("Top", top);
+            table ->PutNumber("Bottom", bot);
 
             if(left < 0) left = 0;
             if(right > im.w-1) right = im.w-1;
